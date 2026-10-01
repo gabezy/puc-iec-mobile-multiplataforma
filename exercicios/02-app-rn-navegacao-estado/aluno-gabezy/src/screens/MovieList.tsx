@@ -1,18 +1,9 @@
-// src/screens/MovieList.tsx
-//
-// CAMADA SCREENS — UI pura. Consome queries + components.
-// "Screen não deveria saber COMO buscar dados. Só renderiza estados da UI."
-//
-// HANDS-ON AULA 2 — Passo 5 (FlatList + usePopularMovies)
-// ATIVIDADE 2 — usar MovieCard com favoritar
-
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { usePopularMovies } from '@/queries/movies/get-popular-movies';
-import { useCounterStore } from '@/store/counterStore';
 import { isTokenError, isTokenMissing } from '@/services/api';
 import TokenMissingScreen from '@/components/TokenMissingScreen';
-// TODO [TASK 3]: descomentar quando renderizar MovieCard
-// import MovieCard from '@/components/MovieCard';
+import { useCounterStore } from '@/store/counterStore';
+import MovieCard from '@/components/MovieCard';
 
 export default function MovieList() {
   const { data, isLoading, error, refetch } = usePopularMovies();
@@ -39,19 +30,16 @@ export default function MovieList() {
     );
   }
 
-  // TODO [TASK 3]: substituir o stub abaixo por FlatList
-  //
-  //   <FlatList
-  //     data={data?.results ?? []}
-  //     keyExtractor={(item) => String(item.id)}
-  //     renderItem={({ item }) => <MovieCard movie={item} />}
-  //     onRefresh={refetch}
-  //     refreshing={isLoading}
-  //   />
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Counter: {count}</Text>
-      <Text>TODO [TASK 3]: renderizar FlatList aqui</Text>
+      <FlatList
+        data={data?.results ?? []}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item }) => <MovieCard movie={item} />}
+        onRefresh={refetch}
+        refreshing={isLoading}
+      />
       <Text style={styles.hint}>{data?.results?.length ?? 0} filmes carregados</Text>
     </View>
   );

@@ -1,44 +1,61 @@
 import MovieCardList from "@/components/MovieCardList";
+import SearchBar from "@/components/SearchBar";
 import { useMovieByIds } from "@/queries/movies/get-movie-by-id";
 import { useFavoritesStore } from "@/store/favoritesStore";
+import { useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 export default function FavoriteMovieList() {
+    const [search, setSearch] = useState('');
+    const isSearching = search.length >= 2;
+
     const favoriteMoviesIds = useFavoritesStore((state) => state.ids);
     const { movies, isLoading, isError } = useMovieByIds(favoriteMoviesIds);
 
-    if (isLoading) {
-        return (
-        <View style={styles.center}>
-            <ActivityIndicator size="large" />
-        </View>
-        );
-    }
+    const filteredMovies = isSearching
+        ? movies.filter((m) => m.title.toLowerCase().includes(search.toLowerCase()))
+        : movies;
 
-    if (isError) {
-        return (
-        <View style={styles.center}>
-            <Text>Erro ao carregar filmes favoritos.</Text>
-        </View>
-        );
-    }
+    const renderContent = () => {
+        if (isLoading) {
+            return (
+            <View style={styles.center}>
+                <ActivityIndicator size="large" />
+            </View>
+            );
+        }
 
-    if (movies.length === 0) {
+        if (isError) {
+            return (
+            <View style={styles.center}>
+                <Text>Erro ao carregar filmes favoritos.</Text>
+            </View>
+            );
+        }
+
+        if (movies.length === 0) {
+            return (
+            <View style={styles.center}>
+                <Text>Nenhum filme favorito encontrado.</Text>
+            </View>
+            );
+        }
+
         return (
-        <View style={styles.center}>
-            <Text>Nenhum filme favorito encontrado.</Text>
-        </View>
+            <MovieCardList 
+                movies={filteredMovies}
+                onDismiss={(id) => useFavoritesStore.getState().remove(id)}
+                refreshing={isLoading}
+            />
         );
     }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Filmes Favoritos</Text>
-            <MovieCardList 
-                movies={movies}
-                onDismiss={(id) => useFavoritesStore.getState().remove(id)}
-                refreshing={isLoading}
-            />
+            <SearchBar onSearch={setSearch} editable={!isLoading} />
+            {renderContent()}
+            <Text style={styles.hint}>{movies?.length ?? 0} filmes favoritos</Text>
         </View>
     );
 }

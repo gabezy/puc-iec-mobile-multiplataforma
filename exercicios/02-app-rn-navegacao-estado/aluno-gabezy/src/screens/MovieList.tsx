@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { usePopularMovies } from '@/queries/movies/get-popular-movies';
 import { isTokenError, isTokenMissing } from '@/services/api';
 import TokenMissingScreen from '@/components/TokenMissingScreen';
 import { useCounterStore } from '@/store/counterStore';
-import MovieCard from '@/components/MovieCard';
+import MovieCardList from '@/components/MovieCardList';
 
 export default function MovieList() {
   const { data, isLoading, error, refetch } = usePopularMovies();
@@ -37,12 +37,9 @@ export default function MovieList() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Counter: {count}</Text>
-      <FlatList
-        data={movies}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <MovieCard movie={item} onDismiss={(id) => setDismissed((ids) => [...ids, id])} />
-        )}
+      <MovieCardList
+        movies={movies}
+        onDismiss={(id) => setDismissed((ids) => [...ids, id])}
         onRefresh={refetch}
         refreshing={isLoading}
       />

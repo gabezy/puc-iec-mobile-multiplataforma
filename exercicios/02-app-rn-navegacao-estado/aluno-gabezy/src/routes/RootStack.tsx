@@ -4,11 +4,11 @@
 // Doc: https://reactnavigation.org/docs/native-stack-navigator
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MovieList from '@/screens/MovieList';
+import BottomTabs from '@/components/BottomTabs';
 import MovieDetail from '@/screens/MovieDetail';
 
 export type RootStackParamList = {
-  Home: undefined;
+  Tabs: undefined;
   Detail: { id: number; title: string };
 };
 
@@ -23,7 +23,7 @@ export default function RootStack() {
         headerBackTitle: 'Voltar',
       }}
     >
-      <Stack.Screen name="Home" component={MovieList} options={{ title: 'Filmes' }} />
+      <Stack.Screen name="Tabs" component={BottomTabs} options={{ headerShown: false }} />
       <Stack.Screen
         name="Detail"
         component={MovieDetail}

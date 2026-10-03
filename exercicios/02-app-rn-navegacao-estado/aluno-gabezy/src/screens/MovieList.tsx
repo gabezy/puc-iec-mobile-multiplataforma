@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { usePopularMovies } from '@/queries/movies/get-popular-movies';
 import { isTokenError, isTokenMissing } from '@/services/api';
@@ -8,6 +9,9 @@ import MovieCard from '@/components/MovieCard';
 export default function MovieList() {
   const { data, isLoading, error, refetch } = usePopularMovies();
   const count = useCounterStore((s) => s.count);
+  // Filmes descartados via swipe (só na sessão atual)
+  const [dismissed, setDismissed] = useState<number[]>([]);
+  const movies = (data?.results ?? []).filter((m) => !dismissed.includes(m.id));
 
   // Tela amigável quando token TMDB não foi configurado ou está inválido.
   if (isTokenMissing || isTokenError(error)) {
@@ -34,9 +38,11 @@ export default function MovieList() {
     <View style={styles.container}>
       <Text style={styles.title}>Counter: {count}</Text>
       <FlatList
-        data={data?.results ?? []}
+        data={movies}
         keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => <MovieCard movie={item} />}
+        renderItem={({ item }) => (
+          <MovieCard movie={item} onDismiss={(id) => setDismissed((ids) => [...ids, id])} />
+        )}
         onRefresh={refetch}
         refreshing={isLoading}
       />

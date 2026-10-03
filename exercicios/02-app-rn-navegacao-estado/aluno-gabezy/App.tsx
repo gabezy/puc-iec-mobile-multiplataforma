@@ -1,11 +1,13 @@
 // App.tsx — root provider tree
 //
 // Ordem importa:
+// 0. GestureHandlerRootView (gestos do swipe nos cards)
 // 1. QueryClientProvider (server state via TanStack Query)
 // 2. ThemeProvider (estado global app via Context)
 // 3. NavigationContainer
 // 4. RootStack (screens)
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
@@ -23,13 +25,15 @@ const queryClient = new QueryClient({
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <NavigationContainer>
-          <RootStack />
-          <StatusBar style="auto" />
-        </NavigationContainer>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>
+          <NavigationContainer>
+            <RootStack />
+            <StatusBar style="auto" />
+          </NavigationContainer>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </GestureHandlerRootView>
   );
 }

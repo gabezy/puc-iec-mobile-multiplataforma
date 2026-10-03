@@ -6,30 +6,39 @@ import { posterUrl } from '@/utils/poster-url';
 import type { RootStackParamList } from '@/routes/RootStack';
 import { useFavoritesStore } from '@/store/favoritesStore';
 import HeartButton from './HeartButton';
+import SwipeableRow from './SwipeableRow';
 
-type Props = { movie: Movie };
+type Props = { movie: Movie; onDismiss: (id: number) => void };
 
-export default function MovieCard({ movie }: Props) {
+export default function MovieCard({ movie, onDismiss }: Props) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const poster = posterUrl(movie.poster_path, 'w185');
   const isFav = useFavoritesStore((s) => s.isFavorite(movie.id));
   const toggle = useFavoritesStore((s) => s.toggle);
+  const add = useFavoritesStore((s) => s.add);
 
   return (
-    <Pressable
-      onPress={() => navigation.navigate('Detail', { id: movie.id, title: movie.title })}
-      style={styles.card}
+    <SwipeableRow
+      onSwipeRight={() => {
+        if (!isFav) add(movie.id);
+      }}
+      onSwipeLeft={() => onDismiss(movie.id)}
     >
-      {poster && <Image source={{ uri: poster }} style={styles.poster} />}
-      <View style={styles.info}>
-        <Text style={styles.title} numberOfLines={2}>
-          {movie.title}
-        </Text>
-        <Text style={styles.meta}>⭐ {movie.vote_average.toFixed(1)}</Text>
-      </View>
+      <Pressable
+        onPress={() => navigation.navigate('Detail', { id: movie.id, title: movie.title })}
+        style={styles.card}
+      >
+        {poster && <Image source={{ uri: poster }} style={styles.poster} />}
+        <View style={styles.info}>
+          <Text style={styles.title} numberOfLines={2}>
+            {movie.title}
+          </Text>
+          <Text style={styles.meta}>⭐ {movie.vote_average.toFixed(1)}</Text>
+        </View>
 
-      <HeartButton active={isFav} onPress={() => toggle(movie.id)} />
-    </Pressable>
+        <HeartButton active={isFav} onPress={() => toggle(movie.id)} />
+      </Pressable>
+    </SwipeableRow>
   );
 }
 

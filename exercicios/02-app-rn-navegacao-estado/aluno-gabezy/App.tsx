@@ -4,14 +4,16 @@
 // 0. GestureHandlerRootView (gestos do swipe nos cards)
 // 1. QueryClientProvider (server state via TanStack Query)
 // 2. ThemeProvider (estado global app via Context)
-// 3. NavigationContainer
-// 4. RootStack (screens)
+// 3. AuthProvider (usuário logado + tokens OAuth2/Keycloak)
+// 4. NavigationContainer
+// 5. RootStack (screens)
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import RootStack from '@/routes/RootStack';
 
 const queryClient = new QueryClient({
@@ -28,10 +30,12 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <NavigationContainer>
-            <RootStack />
-            <StatusBar style="auto" />
-          </NavigationContainer>
+          <AuthProvider>
+            <NavigationContainer>
+              <RootStack />
+              <StatusBar style="auto" />
+            </NavigationContainer>
+          </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

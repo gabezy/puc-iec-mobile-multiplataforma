@@ -1,8 +1,3 @@
-// src/components/MovieCard.tsx
-//
-// CAMADA COMPONENTS — componente reutilizável de card de filme.
-// ATIVIDADE 2 — integrar com useFavoritesStore + HeartButton
-
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -10,9 +5,7 @@ import type { Movie } from '@/types/movie';
 import { posterUrl } from '@/utils/poster-url';
 import type { RootStackParamList } from '@/routes/RootStack';
 import { useFavoritesStore } from '@/store/favoritesStore';
-// TODO [TASK 6]: import store de favoritos
-// TODO [TASK 8]: import HeartButton (criar componente Reanimated)
-// import HeartButton from './HeartButton';
+import HeartButton from './HeartButton';
 
 type Props = { movie: Movie };
 
@@ -35,16 +28,7 @@ export default function MovieCard({ movie }: Props) {
         <Text style={styles.meta}>⭐ {movie.vote_average.toFixed(1)}</Text>
       </View>
 
-      {/* TODO [TASK 8]: substituir por <HeartButton active={isFav} onPress={() => toggle(movie.id)} /> */}
-      <Pressable
-        onPress={(e) => {
-          e.stopPropagation();
-          toggle(movie.id);
-        }}
-        style={styles.heart}
-      >
-        <Text style={styles.heartIcon}>🤍</Text>
-      </Pressable>
+      <HeartButton active={isFav} onPress={() => toggle(movie.id)} />
     </Pressable>
   );
 }

@@ -40,5 +40,6 @@ tmdbClient.interceptors.request.use((config) => {
 // Dica: tmdbClient.get<MoviesResponse>('/movie/popular', { params: {...} })
 // e retorne o `data` da resposta.
 export async function fetchPopularMovies(_page = 1): Promise<MoviesResponse> {
-  throw new Error('TODO 1: fetchPopularMovies não implementada');
+  return await tmdbClient.get<MoviesResponse>('/movie/popular', { params: { page: _page, language: 'pt-BR' } })
+    .then(response => response.data);
 }

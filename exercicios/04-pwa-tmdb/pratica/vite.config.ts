@@ -50,7 +50,39 @@ export default defineConfig({
         //        só entra no cache se você liberar o status 0 em cacheableResponse
         //
         // Referências: slides "Cache strategies" e "vite-plugin-pwa" · web.dev/learn/pwa (módulo Caching)
-        runtimeCaching: [],
+        runtimeCaching: [
+          // API de filmes
+          {
+            urlPattern: ({ url })  => url.pathname.includes('/movie/popular'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'tmdb-api',
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 24 * 60 * 60, // 1 dia
+              },
+              networkTimeoutSeconds: 3,
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            }
+          },
+          // Pôsteres
+          {
+            urlPattern: ({ url }) => url.hostname === 'image.tmdb.org',
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'tmdb-images',
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 7 * 24 * 60 * 60, // 7 dias
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            }
+          }
+        ],
       },
     }),
   ],

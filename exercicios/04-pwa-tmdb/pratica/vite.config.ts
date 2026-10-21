@@ -53,7 +53,7 @@ export default defineConfig({
         runtimeCaching: [
           // API de filmes
           {
-            urlPattern: ({ url })  => url.pathname.includes('/movie/popular'),
+            urlPattern: /^https:\/\/api\.themoviedb\.org\/.*/i,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'tmdb-api',
@@ -69,7 +69,7 @@ export default defineConfig({
           },
           // Pôsteres
           {
-            urlPattern: ({ url }) => url.hostname === 'image.tmdb.org',
+            urlPattern: /^https:\/\/image\.tmdb\.org\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'tmdb-images',

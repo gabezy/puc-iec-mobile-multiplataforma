@@ -1,8 +1,6 @@
 # ENTREGA — Atividade 4 (PWA)
 
-> Preencha e faça commit junto com o código. Esta parte vale 3 pts (avaliação manual no Canvas).
-
-**Nome:** <seu nome> · **GitHub:** <seu-login>
+**Nome:** Gabriel Moreira da Silva de Faria · **GitHub:** gabezy
 
 ---
 
@@ -12,15 +10,18 @@ Abra `https://pwa-tmdb-aula4.vercel.app` e compare com um site comum (ex.: themo
 
 | # | Site comum | PWA | Print/evidência |
 |---|---|---|---|
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
+| 1 | Requer sempre conexão com a internet | Funcionamento Offline | ![alt text](./evidencias/moviedb-off.png) ![alt text](./evidencias/pwa-off.png) |
+| 2 | Similar as web app normais | Experiência mais fluida e mais parecida com uma aplicação nativa |![alt text](./evidencias/moviedb.png) ![alt text](./evidencias/pwa.png)| 
+| 3 | Não Tem funcionalidade de notificação | Tem funcionalidade de notificação | ![alt text](./evidencias/notification.png)|
 
 ## 2. Prova do offline no SEU build
 
-- [ ] Print do **DevTools → Application → Cache Storage** com `tmdb-api` e `tmdb-images` (com itens)
-- [ ] Print do app em **modo avião** carregando a lista
-- [ ] Print do aviso **"Nova versão disponível"** (ou explique por que não conseguiu reproduzir)
+- [x] Print do **DevTools → Application → Cache Storage** com `tmdb-api` e `tmdb-images` (com itens)
+    ![alt text](./evidencias/storage-cache.png)
+- [x] Print do app em **modo avião** carregando a lista
+    ![alt text](./evidencias/modo-aviao.png)
+- [x] Print do aviso **"Nova versão disponível"** (ou explique por que não conseguiu reproduzir)
+    ![alt text](./evidencias/nova-versao.png)
 
 (Coloque os prints numa pasta `evidencias/` e referencie aqui.)
 

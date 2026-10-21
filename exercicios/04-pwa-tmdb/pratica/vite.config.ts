@@ -16,7 +16,7 @@ export default defineConfig({
     VitePWA({
       // TODO 3 (parte 1): hoje o app se atualiza SOZINHO. Troque para o modo em que
       // o usuário decide quando atualizar (veja a tabela do slide "Nova versão").
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'TMDB Popular Movies',

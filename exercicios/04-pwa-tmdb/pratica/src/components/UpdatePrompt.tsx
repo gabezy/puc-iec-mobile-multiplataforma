@@ -19,6 +19,31 @@
 //
 // ⚠️ Só funciona com registerType: 'prompt' (TODO 3, parte 1) e no BUILD (npm run build && npm run preview).
 
+import { useRegisterSW } from "virtual:pwa-register/react";
+
 export function UpdatePrompt() {
-  return null; // TODO 3 — implemente
+  const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW();
+  const [isOfflineReady, setOfflineReady] = offlineReady;
+  const [isNeedRefresh, setNeedRefresh] = needRefresh;
+
+  if (isOfflineReady) {
+    return (
+      <div className="update-prompt">
+        <p>App pronto para uso offline</p>
+        <button onClick={() => setOfflineReady(false)}>Dispensar</button>
+      </div>
+    );
+  }
+
+  if (isNeedRefresh) {
+    return (
+      <div className="update-prompt">
+        <p>Nova versão disponível</p>
+        <button onClick={() => updateServiceWorker(true)}>Atualizar</button>
+        <button onClick={() => setNeedRefresh(false)}>Depois</button>
+      </div>
+    );
+  }
+
+  return null;
 }

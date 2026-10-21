@@ -47,6 +47,7 @@ export function HomeScreen({ activeTab, isFavorite, toggleFavorite }: Props) {
   if (error) return <ErrorScreen error={error} />;
 
   const isEmpty = !loading && movies.length === 0;
+  const favMovies = movies.filter((m) => isFavorite(m.id));
 
   // ─── tab: favorites — TODO 4 (Passos 1 e 2) e TODO 5 (banner) ───────────────
   // Passo 1: filtre `movies` por isFavorite(m.id) → `favMovies`
@@ -67,10 +68,34 @@ export function HomeScreen({ activeTab, isFavorite, toggleFavorite }: Props) {
     return (
       <main style={styles.main} className="main-content">
         <AppHeader title="★ Favoritos" />
-        {/* TODO 4 e TODO 5 — implemente aqui */}
-        <p style={{ color: '#90a4ae', textAlign: 'center', padding: '40px 0' }}>
-          🚧 Passo 1: filtre e renderize os filmes favoritos
-        </p>
+
+        {!isOnline && (
+          <div style={{ background:'#C2410C', color:'#fff', padding:'8px 16px', textAlign:'center', fontSize:14 }}>
+            📡 Offline — exibindo dados do cache
+          </div>
+        )}
+
+
+
+        {favMovies.length === 0 && (
+          <p style={{ color: '#90a4ae', textAlign: 'center', padding: '40px 0', fontSize: 15 }}>
+            {isEmpty ? 'Nenhum filme carregado ainda.' : 'Nenhum favorito ainda — toque ★ em um filme.'}
+          </p>
+        )}
+
+        {favMovies.length > 0 && (
+          <section>
+            {favMovies.map((m) => (
+              <MovieCard
+                key={m.id}
+                movie={m}
+                isFavorite={true}
+                onToggleFavorite={toggleFavorite}
+              />
+            ))}
+          </section>
+        )}
+
       </main>
     );
   }

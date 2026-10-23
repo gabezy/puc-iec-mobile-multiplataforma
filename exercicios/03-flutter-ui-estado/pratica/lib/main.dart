@@ -2,6 +2,9 @@
 //
 // ProviderScope = a "raiz" do Riverpod (deixa qualquer widget ler providers).
 
+import 'package:filmes_flutter/firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,10 +26,10 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance(); // o "armário" que sobrevive ao F5
 
   // TODO [TASK 3 + TASK 7]: descomente a linha abaixo
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // TODO [TASK 10 · 🧑‍🏫 EM AULA · fácil]: ligue a persistência OFFLINE do Firestore (logo depois do initializeApp):
-  //   FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
+  FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
   // (precisa de: import 'package:cloud_firestore/cloud_firestore.dart';)
   // Efeito: escritas feitas sem rede ficam numa fila local do Firestore e sincronizam sozinhas na volta.
 

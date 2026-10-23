@@ -54,3 +54,20 @@ Fork + PR no repo público; link no Canvas. O **J.A.R.V.I.S.** lê o seu código
 Sem chave, o app usa a lista simulada (5 filmes). Para filmes reais: copie `.env.local.example` → `.env.local`,
 cole sua chave do TMDB (`TMDB_KEY=...`) e rode `./rodar.sh` / `rodar.bat` (ou F5 → "dados reais TMDB").
 O `.env.local` não vai pro git. Os testes (`flutter test`) nunca usam a chave.
+
+---
+
+## Minha entrega
+
+### Local × cloud × offline-first (trade-offs)
+Estado **local** (Riverpod em memória / `SharedPreferences`) é instantâneo e funciona sem rede, mas fica preso àquele device e some se o usuário trocar de aparelho ou limpar o navegador. Estado **cloud** (Firestore, TASK 7) vira a fonte de verdade: os favoritos sobrevivem ao refresh e sincronizam entre devices, ao custo de depender de rede, ter latência na primeira leitura (o app abre com a lista vazia até o Firestore responder) e precisar de regras de segurança. **Offline-first** combina os dois: a UI lê primeiro do cache local (cache-first com TTL, TASKs 13–14), mostra um banner quando não há conexão e enfileira as escritas (persistência offline do Firestore + fila de sincronização, TASKs 10 e 15) para enviar quando a rede volta, resolvendo conflitos. Fica rápido e utilizável sem internet, mas é bem mais complexo: dado possivelmente desatualizado, invalidação de cache e conflitos entre devices.
+
+### Prova do Firestore: favorito sobrevive ao refresh (Ex4)
+Favoritei *Interstellar* (♥ 2 → 3), recarreguei a página e ele continuou favoritado (lido de `favorites/meus-favoritos` no Firestore):
+
+![Favorito sobrevivendo ao refresh](evidencias/favorito-refresh-firestore.gif)
+
+### App offline (banner + lista do cache)
+Com o modo offline ligado (✈️), o banner aparece e a lista continua visível a partir dos dados salvos:
+
+![App offline](evidencias/offline.jpg)

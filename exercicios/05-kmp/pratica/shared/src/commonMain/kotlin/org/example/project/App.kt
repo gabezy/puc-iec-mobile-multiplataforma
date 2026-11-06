@@ -17,7 +17,8 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.round
 import org.example.project.data.Movie
 import org.example.project.data.TmdbApi
-
+import coil3.compose.AsyncImage
+import androidx.compose.ui.layout.ContentScale
 // ─────────────────────────────────────────────────────────────────────────────
 // App — Composable raiz compartilhado entre Android, iOS e Web.
 //
@@ -88,10 +89,7 @@ private fun MovieList(movies: List<Movie>) {
         item {
             Text("${movies.size} filmes populares")
         }
-        items(
-            items = movies,
-            key = { it.id }
-        ) { movie -> MovieCard(movie) }
+        items(movies) { movie -> MovieCard(movie) }
     }
 }
 
@@ -111,7 +109,7 @@ private fun MovieCard(movie: Movie) {
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.Top
         ) {
-            // Placeholder de poster: inicial do título
+            val posterUrl = movie.posterPath?.let { "https://image.tmdb/t/p/w185$it" }
             Box(
                 modifier = Modifier
                     .size(width = 56.dp, height = 84.dp)
@@ -119,10 +117,19 @@ private fun MovieCard(movie: Movie) {
                     .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = movie.title.take(1).uppercase(),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                if (posterUrl == null) {
+                    Text(
+                        text = movie.title.take(1).uppercase(),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+
+                AsyncImage(
+                    model = posterUrl,
+                    contentDescription = movie.title,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 
